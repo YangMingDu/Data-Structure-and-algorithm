@@ -5,7 +5,7 @@
 using namespace :: std;
 
 
- /*运用范式编程，可以使数组元素不局限于单一类型*/
+ /*运用泛式编程，可以使数组元素不局限于单一类型*/
 template<typename T>
  /*输入为原数组以及元素数量，输出为空*/
 void InsertionSortOptimized(T arr[],int n){

@@ -5,7 +5,7 @@
 using namespace :: std;
 
 template<typename T>
- /*运用范式编程，可以使数组元素不局限于单一类型*/
+ /*运用泛式编程，可以使数组元素不局限于单一类型*/
 void SelectionSort(T arr[],int n){
     for(int i = 0; i < n; i ++ ){
          /*最小元素的索引，初始化为i*/
