@@ -4,51 +4,27 @@
 
 using namespace :: std;
 
-class Solution{
+class Solution {
 public:
-    int findContentChildren(vector<int>& g,vector<int>& s){
+    bool isSubsequence(string s, string t) {
 
-        /*从大到小排序*/
-
-        sort(g.begin(),g.end(),greater<int>());
-        sort(s.begin(),s.end(),greater<int>());
-
-        /*i为小朋友的索引，j为饼干的索引，res为满足的小朋友的数量*/
-
+        int l_s = s.length();
+        int l_t = t.length();
         int i = 0;
         int j = 0;
-        int res = 0;
 
-        /*边界为小朋友个数和饼干个数*/
+        while (i < l_s && j < l_t) {
 
-        while(i < g.size() && j < s.size()){
-
-            /*如果饼干大小大于等于贪心指数，那么就将这个饼干给这个小朋友，满足小朋友个数加1，饼干和小朋友都换成下一个*/
-
-            if (s[i] >= g[j]){
-                res ++;
+            if (s[i] == t[j]) {
                 i++;
-                j++;
             }
-            /*如果饼干大小小于贪心指数，那么不能满足这个小朋友，小朋友换下一个*/
-            else{
-
-                i++;
-
-            }
-
-
-
-
-
+            j++;
         }
-        return res;
-
-
-    }    
-
-
+        return i == l_s;
+    }
 };
+
+
 
 int main(){
 
