@@ -47,7 +47,6 @@ long long __merge( int arr[], int l, int mid, int r){
 }
 
 // 求arr[l..r]范围的逆序数对个数
-// 思考: 归并排序的优化可否用于求逆序数对的算法? :)
 long long __inversionCount(int arr[], int l, int r){
 
     if( l >= r )
