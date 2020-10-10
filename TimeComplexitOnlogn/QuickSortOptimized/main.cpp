@@ -3,11 +3,14 @@
 #include "Student.h"
 #include "SortTestHelper.h"
 #include "InsertionSort.h"
+#include <ctime>
 using namespace :: std;
 
 
 template<typename T>
 int __partition(T arr[],int left,int right){
+
+    swap(arr[left],arr[rand()%(right-left+1)+left]);
 
     T v =arr[left];
 
@@ -55,6 +58,9 @@ void __QuickSort(T arr[],int left,int right){
 template<typename T>
 
 void QuickSortOptimized(T arr[],int n){
+
+  srand(time(NULL));
+
 
   __QuickSort(arr,0,n-1);
 
