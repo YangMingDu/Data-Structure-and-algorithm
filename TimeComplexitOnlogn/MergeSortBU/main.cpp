@@ -14,7 +14,7 @@ void MergeSortBU(T arr[],int n){
   for(int size = 1; size <= n ;size += size){
 
     for(int i = 0; i + size < n; i += size + size){
-      /*对arr[i...i+size-1]和arr[i+size...i+2*size-1]进行归并*/
+      /*对arr[i...i+size-1]和arr[i+size...i+2*size-1]进行归并!*/
       
       __Merge(arr , i ,i + size - 1,min(i + size + size - 1 ,n-1));
     }
