@@ -2,6 +2,12 @@
 #define MERGESORTOPTIMIZED_INSERTIONSORT_H
 
 
+#include <iostream>
+#include <algorithm>
+#include "Student.h"
+#include "SortTestHelper.h"
+using namespace :: std;
+
 template<typename T>
 void InsertionSort(T arr[],int left,int right){
 
