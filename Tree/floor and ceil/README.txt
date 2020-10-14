@@ -1,0 +1,2 @@
+floor:二分查找法, 在有序数组arr中, 查找target,如果找到target, 返回第一个target相应的索引index,如果没有找到target, 返回比target小的最大值相应的索引, 如果这个最大值有多个, 返回最大索引,如果这个target比整个数组的最小元素值还要小, 则不存在这个target的floor值, 返回-1
+ceil:二分查找法, 在有序数组arr中, 查找target,如果找到target, 返回最后一个target相应的索引index,如果没有找到target, 返回比target大的最小值相应的索引, 如果这个最小值有多个, 返回最小的索引,如果这个target比整个数组的最大元素值还要大, 则不存在这个target的ceil值, 返回整个数组元素个数n
