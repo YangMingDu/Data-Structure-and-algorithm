@@ -1,12 +1,8 @@
 #include <iostream>
-#include <algorithm>
-#include <string>
-#include <ctime>
-#include <cmath>
 #include <cassert>
 #include "SortTestHelper.h"
-using namespace :: std;
 
+using namespace std;
 
 // 最大索引堆
 template<typename Item>
@@ -14,7 +10,8 @@ class IndexMaxHeap{
 
 private:
     Item *data;     // 最大索引堆中的数据
-    int *indexes;   // 最大索引堆中的索引
+    int *indexes;   // 最大索引堆中的索引, indexes[x] = i 表示索引i在x的位置
+    int *reverse;   // 最大索引堆中的反向索引, reverse[i] = x 表示索引i在x的位置
 
     int count;
     int capacity;
@@ -24,6 +21,8 @@ private:
 
         while( k > 1 && data[indexes[k/2]] < data[indexes[k]] ){
             swap( indexes[k/2] , indexes[k] );
+            reverse[indexes[k/2]] = k/2;
+            reverse[indexes[k]] = k;
             k /= 2;
         }
     }
@@ -40,6 +39,8 @@ private:
                 break;
 
             swap( indexes[k] , indexes[j] );
+            reverse[indexes[k]] = k;
+            reverse[indexes[j]] = j;
             k = j;
         }
     }
@@ -50,6 +51,9 @@ public:
 
         data = new Item[capacity+1];
         indexes = new int[capacity+1];
+        reverse = new int[capacity+1];
+        for( int i = 0 ; i <= capacity ; i ++ )
+            reverse[i] = 0;
 
         count = 0;
         this->capacity = capacity;
@@ -58,6 +62,7 @@ public:
     ~IndexMaxHeap(){
         delete[] data;
         delete[] indexes;
+        delete[] reverse;
     }
 
     // 返回索引堆中的元素个数
@@ -76,9 +81,13 @@ public:
         assert( count + 1 <= capacity );
         assert( i + 1 >= 1 && i + 1 <= capacity );
 
+        // 再插入一个新元素前,还需要保证索引i所在的位置是没有元素的。
+        assert( !contain(i) );
+
         i += 1;
         data[i] = item;
         indexes[count+1] = i;
+        reverse[i] = count+1;
         count++;
 
         shiftUp(count);
@@ -90,8 +99,14 @@ public:
 
         Item ret = data[indexes[1]];
         swap( indexes[1] , indexes[count] );
+        reverse[indexes[count]] = 0;
         count--;
-        shiftDown(1);
+
+        if(count){
+            reverse[indexes[1]] = 1;
+            shiftDown(1);
+        }
+
         return ret;
     }
 
@@ -101,8 +116,14 @@ public:
 
         int ret = indexes[1] - 1;
         swap( indexes[1] , indexes[count] );
+        reverse[indexes[count]] = 0;
         count--;
-        shiftDown(1);
+
+        if(count) {
+            reverse[indexes[1]] = 1;
+            shiftDown(1);
+        }
+
         return ret;
     }
 
@@ -118,54 +139,79 @@ public:
         return indexes[1]-1;
     }
 
+    // 看索引i所在的位置是否存在元素
+    bool contain( int i ){
+        assert( i + 1 >= 1 && i + 1 <= capacity );
+        return reverse[i+1] != 0;
+    }
+
     // 获取最大索引堆中索引为i的元素
     Item getItem( int i ){
-        assert( i + 1 >= 1 && i + 1 <= capacity );
+        assert( contain(i) );
         return data[i+1];
     }
 
     // 将最大索引堆中索引为i的元素修改为newItem
     void change( int i , Item newItem ){
 
+        assert( contain(i) );
         i += 1;
         data[i] = newItem;
 
         // 找到indexes[j] = i, j表示data[i]在堆中的位置
         // 之后shiftUp(j), 再shiftDown(j)
-        for( int j = 1 ; j <= count ; j ++ )
-            if( indexes[j] == i ){
-                shiftUp(j);
-                shiftDown(j);
-                return;
-            }
+//        for( int j = 1 ; j <= count ; j ++ )
+//            if( indexes[j] == i ){
+//                shiftUp(j);
+//                shiftDown(j);
+//                return;
+//            }
+
+        // 有了 reverse 之后,
+        // 我们可以非常简单的通过reverse直接定位索引i在indexes中的位置
+        shiftUp( reverse[i] );
+        shiftDown( reverse[i] );
     }
 
-    // 测试索引堆中的索引数组index
+    // 测试索引堆中的索引数组index和反向数组reverse
     // 注意:这个测试在向堆中插入元素以后, 不进行extract操作有效
-    bool testIndexes(){
+    bool testIndexesAndReverseIndexes(){
 
         int *copyIndexes = new int[count+1];
+        int *copyReverseIndexes = new int[count+1];
 
-        for( int i = 0 ; i <= count ; i ++ )
+        for( int i = 0 ; i <= count ; i ++ ){
             copyIndexes[i] = indexes[i];
+            copyReverseIndexes[i] = reverse[i];
+        }
 
-        copyIndexes[0] = 0;
+        copyIndexes[0] = copyReverseIndexes[0] = 0;
         std::sort(copyIndexes, copyIndexes + count + 1);
+        std::sort(copyReverseIndexes, copyReverseIndexes + count + 1);
 
-        // 在对索引堆中的索引进行排序后, 应该正好是1...count这count个索引
+        // 在对索引堆中的索引和反向索引进行排序后,
+        // 两个数组都应该正好是1...count这count个索引
         bool res = true;
         for( int i = 1 ; i <= count ; i ++ )
-            if( copyIndexes[i-1] + 1 != copyIndexes[i] ){
+            if( copyIndexes[i-1] + 1 != copyIndexes[i] ||
+                    copyReverseIndexes[i-1] + 1 != copyReverseIndexes[i] ){
                 res = false;
                 break;
             }
 
         delete[] copyIndexes;
+        delete[] copyReverseIndexes;
 
         if( !res ){
             cout<<"Error!"<<endl;
             return false;
         }
+
+        for( int i = 1 ; i <= count ; i ++ )
+            if( reverse[ indexes[i] ] != i ){
+                cout<<"Error 2"<<endl;
+                return false;
+            }
 
         return true;
     }
@@ -179,15 +225,15 @@ void heapSortUsingIndexMaxHeap(T arr[], int n){
     IndexMaxHeap<T> indexMaxHeap = IndexMaxHeap<T>(n);
     for( int i = 0 ; i < n ; i ++ )
         indexMaxHeap.insert( i , arr[i] );
-    assert( indexMaxHeap.testIndexes() );
+    assert( indexMaxHeap.testIndexesAndReverseIndexes() );
 
     for( int i = n-1 ; i >= 0 ; i -- )
         arr[i] = indexMaxHeap.extractMax();
 }
 
-int main(){
+int main() {
 
-int n = 1000000;
+    int n = 1000000;
 
     int* arr = SortTestHelper::generateRandomArray(n, 0, n);
     SortTestHelper::TestSort("Heap Sort Using Index-Max-Heap", heapSortUsingIndexMaxHeap, arr, n);
