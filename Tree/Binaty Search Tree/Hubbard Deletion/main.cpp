@@ -19,6 +19,12 @@ private:
             this->value = value;
             this->left = this->right = NULL;
         }
+        Node(Node* node){
+            this->key = node->key;
+            this->value = node->value;
+            this->left = node->left;
+            this->right = node->right;
+        }
     };
 
     Node *root;
@@ -114,6 +120,10 @@ public:
         if(root){
             root = removeMax(root);
         }
+    }
+    //删除键值为key的节点
+    void remove(Key key){
+        root = remove(root,key);
     }
 private:
     //向以node为根的二叉搜索树中插入节点（key，value）
@@ -260,6 +270,46 @@ private:
         return node;
 
 
+    }
+    //删除以node为根的二分搜索树中的键值为key的节点，返回新的二叉搜索树的根
+    Node* remove(Node* node,Key key){
+
+        if( node == NULL){
+            return NULL;
+        }
+
+        if(key < node->key){
+            node->left  = remove( node -> left, key);
+            return node;
+        }
+        else if(key > node->key){
+            node->right  = remove( node -> right, key);
+            return node;
+        }
+        else{
+            if(node -> left == NULL){
+                Node* rightNode = node->right;
+                delete node;
+                count--;
+                return rightNode;
+            }
+            else if(node -> right == NULL){
+                Node* leftNode = node->left;
+                delete node;
+                count--;
+                return leftNode;
+            }
+            Node *delNode = node;//原来的节点，也就是要删除的节点
+            Node *successor = new Node(minimum(node->right));//后继的节点
+            count ++;
+
+            successor->right = removeMin(node -> right);
+            successor->left = node->left;
+
+            delete delNode;
+            count--;
+            return successor;
+        }
     }
 
 
