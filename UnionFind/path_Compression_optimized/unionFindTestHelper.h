@@ -5,7 +5,7 @@
 #include "unionFind3.h"
 #include "unionFind4.h"
 #include "unionFind5.h"
-
+#include "unionFind6.h"
 using namespace :: std;
 
 namespace unionFindTestHelper{
@@ -107,5 +107,23 @@ namespace unionFindTestHelper{
         time_t endTime = clock();
         cout << "UF5, "<<2*n<<" ops, "<<double(endTime - startTime)/CLOCKS_PER_SEC<<endl;
     }
+    void testUF6(int n){
+        srand( time(NULL) );
+        UF6 :: UnionFind uf = UF6 ::UnionFind(n);
 
+        time_t startTime = clock();
+
+        for( int i = 0 ; i < n ; i ++ ){
+            int a = rand()%n;
+            int b = rand()%n;
+            uf.unionElements(a,b);
+        }
+        for( int i = 0 ; i < n ; i ++ ){
+            int a = rand()%n;
+            int b = rand()%n;
+            uf.isConnected(a,b);
+        }
+        time_t endTime = clock();
+        cout << "UF6, "<<2*n<<" ops, "<<double(endTime - startTime)/CLOCKS_PER_SEC<<endl;
+    }
 }

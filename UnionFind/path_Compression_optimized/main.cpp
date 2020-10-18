@@ -10,7 +10,7 @@ int main(){
     int n = 1000000;
    /*  int n = 100000;*/
 
-    unionFindTestHelper::testUF3(n);
+    unionFindTestHelper::testUF6(n);
     unionFindTestHelper::testUF5(n);
 
     return 0;
