@@ -7,8 +7,8 @@ using namespace :: std;
 int main(){
     
     
-    int M = 20;
-    int N = 100;
+    int N = 20;
+    int M = 100;
 
     srand( time(NULL) );
     //生成20个点100条边的图
