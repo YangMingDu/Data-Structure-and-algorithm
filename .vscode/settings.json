@@ -2,6 +2,7 @@
     "files.associations": {
         "ctime": "cpp",
         "new": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "cassert": "cpp"
     }
 }
