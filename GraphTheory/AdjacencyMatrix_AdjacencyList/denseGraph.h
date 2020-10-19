@@ -5,7 +5,7 @@
 using namespace ::std;
 
 class denseGraph{
-
+//稠密图，用邻接矩阵实现
 private:
 
     int n,m;//n个点，m条边
@@ -33,6 +33,7 @@ public:
     void addEdge( int v, int w){
         assert( v >= 0 && v < n);
         assert( w >= 0 && w < n);
+        //如果已经有边，直接返回
         if(hasEdge(v,w)){
             return;
         }
@@ -44,7 +45,7 @@ public:
 
         m ++;
     }
-    
+    //判断是否已经有边
     bool hasEdge (int v, int w){
         assert( v >= 0 && v < n);
         assert( w >= 0 && w < n); 
