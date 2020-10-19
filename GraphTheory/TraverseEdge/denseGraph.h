@@ -51,6 +51,45 @@ public:
         assert( w >= 0 && w < n); 
         return g[v][w];      
     }
+ class adjIterator{
+    
+    private:
 
+        denseGraph &G;
+        int v;
+        int index;
+    
+    public:
+
+        adjIterator(denseGraph &graph, int v): G(graph){
+
+            this->v = v;
+            this->index = -1;
+
+
+        }
+
+        int begin(){
+            index = -1;
+            return next();
+
+        }
+
+        int next(){
+            for(index += 1 ; index < G.V() ; index ++){
+                if(G.g[v][index]){
+                    return index;
+                }
+            }
+            return -1;
+
+        }
+
+        bool end(){
+
+            return index >= G.V();
+
+        }
+    };
 
 };
