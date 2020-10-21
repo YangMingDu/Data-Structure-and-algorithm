@@ -3,6 +3,7 @@
         "ctime": "cpp",
         "new": "cpp",
         "iostream": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "vector": "cpp"
     }
 }
