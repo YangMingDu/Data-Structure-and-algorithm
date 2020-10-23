@@ -9,6 +9,8 @@ public:
     vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
         
         //数据是int型，出现的次数也是int型
+        //map底层为平衡二叉树，时间复杂度为O（logn）
+        //如果改为unordered_map，底层为哈希表，时间复杂度为O（1）
         map<int,int> record;
         //遍历nums1，将其种类和频率都输入进map
         for(int i = 0 ; i < nums1.size(); i ++){

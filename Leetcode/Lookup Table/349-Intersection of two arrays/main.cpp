@@ -14,6 +14,8 @@ public:
         }*/
 
         //使用set内置的构造函数，将nums1每种元素都放到record这个set里面
+        //set底层为平衡二叉树，时间复杂度为O（logn）
+        //如果改为unordered_set，底层为哈希表，时间复杂度为O（1）
         set<int> record(nums1.begin(),nums2.end());
         
         set<int> resultSet;
