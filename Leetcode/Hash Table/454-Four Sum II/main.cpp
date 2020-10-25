@@ -5,6 +5,8 @@ using namespace :: std;
 
 class Solution {
 public:
+    //时间复杂度：O（n²）
+    //空间复杂度：O（n²）
     //利用哈希表结局问题，首先将A，B两个数组的任意两个元素的和的种类与出现次数放入哈希表中，再遍历所有C，D两个数组的任意两元素的和，在哈希表中寻找是否有合适的结果，以及出现的次数，计数即可。
     int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
 
