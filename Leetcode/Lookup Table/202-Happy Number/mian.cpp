@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-
 using namespace :: std;
+
 class Solution {
     //将数字拆开并计算平方
     int calNum(int n){
