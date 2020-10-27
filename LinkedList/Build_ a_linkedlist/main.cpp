@@ -5,7 +5,7 @@ struct ListNode {
       ListNode *next;
       ListNode(int x) : val(x), next(nullptr) {}
 };
- 
+//创建链表
 ListNode* createLinkedList(int arr[], int n){
     if( n == 0){
         return nullptr;
@@ -23,7 +23,7 @@ ListNode* createLinkedList(int arr[], int n){
     return head;
 
 }
-
+//打印链表
 void printLinkedList(ListNode* head){
 
     ListNode*curNode = head;
@@ -37,6 +37,15 @@ void printLinkedList(ListNode* head){
 
     return;
 
+}
+//删除new出的空间
+void deleteLinkedList(ListNode* head){
+    ListNode* curNode = head;
+    while(curNode != nullptr){
+        ListNode* delNode = curNode;
+        curNode = curNode->next;
+        delete delNode;
+    }
 }
 
 class Solution {
@@ -83,6 +92,8 @@ int main(){
     ListNode* head2 = Solution().reverseBetween(head,2,4);
 
     printLinkedList(head2);
+
+    deleteLinkedList(head2);
     
 
 }
