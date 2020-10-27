@@ -108,19 +108,51 @@ public:
         return ret;
     }
 };
+class Solution3 {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* resultathead = new ListNode(-1);
+        ListNode* resultatcur = resultathead;
+        int carry = 0;
+        while(l1 != nullptr || l2 != nullptr || carry != 0){
+            int l1Val = l1 ? l1->val : 0;
+            int l2Val = l2 ? l2->val : 0;
+            int sum = l1Val + l2Val + carry;
+            carry = sum/10;
+            int sumRes = sum % 10;
 
+            ListNode* newNode = new ListNode(sumRes);
+            resultatcur->next = newNode;
+            resultatcur = newNode;
+
+            if(l1 != nullptr){
+                l1 = l1->next;
+            }
+            if(l2 != nullptr){
+                l2 = l2->next;
+            }
+
+
+        }
+        ListNode* ret = resultathead->next;
+        delete resultathead;
+        return ret;
+    }
+};
 int main(){
-    int arr[] = {1,1};
-    int n = sizeof(arr)/sizeof(int);
+    int arr1[] = {2,1,1};
+    int arr2[] = {7,3,1};
+    int n1 = sizeof(arr1)/sizeof(int);
+    int n2 = sizeof(arr2)/sizeof(int);
+    ListNode* head1 = createLinkedList(arr1,n1);
+    ListNode* head2 = createLinkedList(arr2,n2);
 
-    ListNode* head = createLinkedList(arr,n);
-    printLinkedList(head);
 
-    ListNode* head2 = Solution2().partition(head,0);
+    ListNode* head3 = Solution3().addTwoNumbers(head1,head2);
 
-    printLinkedList(head2);
+    printLinkedList(head3);
 
-    deleteLinkedList(head2);
+    deleteLinkedList(head3);
     
 
 }
