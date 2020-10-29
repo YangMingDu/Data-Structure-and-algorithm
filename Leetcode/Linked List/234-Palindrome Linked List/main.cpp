@@ -27,19 +27,19 @@ public:
 
         ListNode* slow = head;
         ListNode* fast = head;
-
+        //快慢指针分割链表
         while(fast->next != nullptr && fast->next->next != nullptr){
             fast = fast->next->next;
             slow = slow->next;
         }
-
+        //翻转第二段
         ListNode* L2 = slow->next;
         slow->next = nullptr;
         L2 = reverse(L2);
 
         ListNode* L1cur = head;
         ListNode* L2cur = L2;
-
+        //比大小
         while(L1cur != nullptr && L2cur != nullptr){
 
             if(L1cur->val != L2cur->val){
