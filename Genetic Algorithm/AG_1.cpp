@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #define ulong unsigned long
 #define uint unsigned int
@@ -164,6 +165,47 @@ void calculateFitness(Gene &gene, Store &store) {
     }
     gene.fitness = fulfillTime;
 }
+
+string AtoS(int arr[],int n){
+    string res;
+    for(int i = 0 ; i < n; i++){
+        char a = arr[i] + '0';
+        res += a;
+    }
+    return res;
+
+}
+
+void readFileResultat(string f, int arr[]){
+    ifstream infile;
+    infile.open(f);
+    if (!infile.is_open())
+    {
+        cout << "open failed" << endl;
+        exit(0);
+    }
+
+    string line , number;
+    istringstream is(line);
+    int i , j = 0 ;
+    int p;
+    while(std::getline(infile, line))
+    {
+        istringstream is(line);
+        while(std::getline(is, number, ','))
+        {
+            arr[j] = stoi(number) ;
+            j++;
+        }
+
+        j=0;
+        i++;
+    }
+ 
+
+    infile.close();
+
+}
  
 /**
  * 初始化种群
@@ -191,6 +233,18 @@ void initializePopulation(vector<Gene> &genes, int population) {
         calculateFitness(gene, store);
         gs.insert(gene);
     }
+
+    int arr[] = {};
+    readFileResultat("result.csv", arr);
+    int n = sizeof(arr)/sizeof(int);
+    Gene gene2;
+    gene2.chromosome = AtoS(arr,n);
+    remove_if(gene2.chromosome.begin(), gene2.chromosome.end(), [](char v) -> bool { return v == '0'; });
+    gene2.chromosome.resize(static_cast<ulong>(chromosome_size));
+    Store store;
+    calculateFitness(gene2,store);
+    gs.insert(gene2);
+
     insert_iterator<vector<Gene>> insert_vector(genes, genes.begin());
     copy(gs.begin(), gs.end(), insert_vector);
 }
@@ -274,6 +328,7 @@ Gene selectIndividual(int n = 10) {
     return best_gene;
 }
 
+
 void readFile(string f,int m[N][N],bool b){
     ifstream infile;
     infile.open(f);
@@ -316,8 +371,8 @@ int main() {
     srand(static_cast<uint>(time(nullptr)));
  
     chromosome_size = 0;
-    readFile("insm2.csv",matrix.Machine,1);
-    readFile("inst2.csv",matrix.Time,0);
+    readFile("insm1.csv",matrix.Machine,1);
+    readFile("inst1.csv",matrix.Time,0);
  
     for (int i = 0; i < job; i++) {
         for (int j = 0; j < process; j++) {
