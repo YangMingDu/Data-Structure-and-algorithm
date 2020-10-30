@@ -256,7 +256,7 @@ pair<Gene, Gene> orderCrossover(Gene &first, Gene &second) {
  * @param n 
  * @return 
  */
-Gene selectIndividual(int n = 3) {
+Gene selectIndividual(int n = 10) {
     vector<int> index_list;
     generateVector(index_list, population_number);
     vector<Gene> simple;
@@ -316,17 +316,8 @@ int main() {
     srand(static_cast<uint>(time(nullptr)));
  
     chromosome_size = 0;
-
-    readFile("insm1.csv",matrix.Machine,1);
-
-    readFile("insm1.csv",matrix.Time,0);
-
-    for(int i = 0; i < 15; i++){
-        for(int j = 0; j < 15; j++){
-            cout<<matrix.Time[i][j]<<",";
-        }
-        cout<<endl;
-    }
+    readFile("insm2.csv",matrix.Machine,1);
+    readFile("inst2.csv",matrix.Time,0);
  
     for (int i = 0; i < job; i++) {
         for (int j = 0; j < process; j++) {
