@@ -7,14 +7,16 @@
 #include <vector>
 #include <set>
 #include <cstdlib>
+#include <fstream>
+#include <sstream>
 
 #define ulong unsigned long
 #define uint unsigned int
- 
+
 using namespace std;
 const ulong population_number = 20;
-const ulong times = 5;
-const ulong N = 200;
+const ulong times = 10;
+const ulong N = 20;
  
 int machine;          //机器数量
 int job;              //工件数量
@@ -271,26 +273,59 @@ Gene selectIndividual(int n = 3) {
     }
     return best_gene;
 }
+
+void readFile(string f,int m[N][N],bool b){
+    ifstream infile;
+    infile.open(f);
+    if (!infile.is_open())
+    {
+        cout << "open failed" << endl;
+        exit(0);
+    }
+
+    string line , number;
+    istringstream is(line);
+    int i , j = 0 ;
+    int p;
+    while(std::getline(infile, line))
+    {
+        istringstream is(line);
+        while(std::getline(is, number, ','))
+        {
+            m[i][j] = stoi(number) ;
+            j++;
+        }
+        if (b){
+            p = j;
+            chromosome_size += p;
+            if (process < p) process = p;
+        }
+        j=0;
+        i++;
+    }
+    if(b){
+        cout << "input job and machine:" << endl;
+        cin >> job >> machine;
+    }
+
+    infile.close();
+
+}
  
 int main() {
     srand(static_cast<uint>(time(nullptr)));
  
     chromosome_size = 0;
-    cout << "input job and machine:" << endl;
-    cin >> job >> machine;
-    for (int i = 0; i < job; i++) {
-        int p;
-        cout << "input job" << i << " process:" << endl;
-        cin >> p;
-        chromosome_size += p;
-        if (process < p) process = p;
-        cout << "input machine and time:" << endl;
-        for (int j = 0; j < p; j++) {
-            int m, t;
-            cin >> m >> t;
-            matrix.Machine[i][j] = m;
-            matrix.Time[i][j] = t;
+
+    readFile("insm1.csv",matrix.Machine,1);
+
+    readFile("insm1.csv",matrix.Time,0);
+
+    for(int i = 0; i < 15; i++){
+        for(int j = 0; j < 15; j++){
+            cout<<matrix.Time[i][j]<<",";
         }
+        cout<<endl;
     }
  
     for (int i = 0; i < job; i++) {
@@ -333,7 +368,7 @@ int main() {
  
     Gene best_gene(0xffffff);
     for (const auto &it : populations) {
-        cout << "chromosome = " << it.chromosome << " " << it.fitness << endl;
+        //cout << "chromosome = " << it.chromosome << " " << it.fitness << endl;
         if (best_gene.fitness > it.fitness) {
             best_gene = it;
         }
