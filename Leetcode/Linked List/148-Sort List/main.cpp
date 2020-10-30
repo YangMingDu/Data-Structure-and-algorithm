@@ -5,70 +5,53 @@ struct ListNode {
       ListNode(int x) : val(x), next(nullptr) {}
       ListNode(int x, ListNode *next) : val(x), next(next) {}
   };
-class Solution 
-{
+class Solution {
 public:
-    ListNode* insertionSortList(ListNode* head) {
-        if(head == nullptr || head->next == nullptr)
+    //链表中的归并排序
+    ListNode * sortList(ListNode * head)
+    {
+        return  (head == nullptr)? nullptr: mergeSort(head);
+    }
+
+private:
+    ListNode * findMid(ListNode * head)
+    {
+        ListNode * slow = head;
+        ListNode * fast = head;
+        ListNode * previous = nullptr;
+        while (fast != nullptr && fast->next != nullptr)
         {
-            return head;
+            previous = slow;
+            slow = slow->next;
+            fast = fast->next->next;
         }
+        // split the list into two parts
+        previous->next = nullptr;
+        return slow;
+    }
 
+    ListNode * mergeTwoLists(ListNode * l1, ListNode * l2)
+    {
+        if(l1 == nullptr) return l2;
+        if(l2 == nullptr) return l1;
 
-        //建立新的链表进行操作和对比。
-        ListNode* testHead = new ListNode(-1);
-        testHead->next = head;
-
-
-
-        ListNode* pre = head;
-        ListNode* cur = pre->next;
-
-        while(cur != nullptr){
-
-            //因为前面已经有序，所以当cur值大于pre值说明还是有序，不需要排序。
-            if(cur->val >= pre->val){
-                pre = cur;
-                cur = cur->next;
-            }
-            //需要排序
-            else{
-
-                //拿出要插入的节点
-                pre->next = cur->next;
-                cur->next = nullptr;
-
-
-
-
-                ListNode* curTest = testHead;
-                //找到合适的位置
-                while(curTest->next->val <= cur->val){
-                    curTest = curTest->next;
-                } 
-
-                //维护
-                cur->next = curTest->next;
-                curTest->next = cur;
-                cur = pre->next;
-
-
-            }
-            
-
-            
+        if(l1->val < l2->val){
+            l1->next = mergeTwoLists(l1->next,l2);
+            return l1;
+        }else{
+            l2->next = mergeTwoLists(l1,l2->next);
+            return l2;
         }
+    }
 
-        ListNode* ret = testHead->next;
-        delete testHead;
-        return ret;
-        
-        
-        
-        
-        
-        
-        
-        
-        }
+    ListNode * mergeSort(ListNode * head)
+    {
+        if (head->next == nullptr) return head;
+        ListNode * mid = findMid(head);
+        ListNode * l1 = mergeSort(head);
+        ListNode * l2 = mergeSort(mid);
+        return mergeTwoLists(l1, l2);
+    }
+
 };
+
