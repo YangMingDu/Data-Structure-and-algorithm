@@ -16,7 +16,7 @@
 
 using namespace std;
 const ulong population_number = 20;
-const ulong times = 10;
+const ulong times = 300;
 const ulong N = 20;
  
 int machine;          //机器数量
@@ -237,7 +237,7 @@ void initializePopulation(vector<Gene> &genes, int population) {
     readFileResultat("Heuristique.csv", arr);
     gene2.chromosome = AtoS(arr);
 
-    remove_if(gene2.chromosome.begin(), gene2.chromosome.end(), [](char v) -> bool { return v == '0'; });
+    remove_if(gene2.chromosome.begin(), gene2.chromosome.end(), [](char v) -> bool { return v == '0'; }); 
     gene2.chromosome.resize(static_cast<ulong>(chromosome_size));
     Store store;
     calculateFitness(gene2,store);
@@ -252,7 +252,7 @@ void initializePopulation(vector<Gene> &genes, int population) {
  * @param gene 
  * @param n 
  */
-void geneticMutation(Gene &gene, int n = 2) {
+void geneticMutation(Gene &gene, int n = 3) {
     vector<int> index_list;
     generateVector(index_list, chromosome_size);
     for (int i = 0; i < n; i++) {
@@ -368,24 +368,12 @@ void readFile(string f,int m[N][N],bool b){
  
 int main() {
     srand(static_cast<uint>(time(nullptr)));
+    clock_t startTime = clock();
  
     chromosome_size = 0;
     readFile("Machines.csv",matrix.Machine,true);
     readFile("Times.csv",matrix.Time,false);
-/*     for(int i = 0; i < 15; i++){
-        for(int j = 0; j < 15; j++){
-            cout<<matrix.Machine[i][j]<<",";
-        }
-        cout<<endl;
-        
-    }
-     for(int i = 0; i < 15; i++){
-        for(int j = 0; j < 15; j++){
-            cout<<matrix.Time[i][j]<<",";
-        }
-        cout<<endl;
-        
-    }  */
+
  
     for (int i = 0; i < job; i++) {
         for (int j = 0; j < process; j++) {
@@ -453,8 +441,6 @@ int main() {
         
     }
 
-    cout << "result = " << res << endl;
-    cout <<"time = " << best_gene.fitness << endl;
     calculateFitness(best_gene, store);
     for (int i = 0; i < machine; i++) {
         cout << "machine" << i << " work time " << store.machineWorkTime[i] << endl;
@@ -467,7 +453,11 @@ int main() {
                      << store.startTime[j][k] << " end time=" << store.endTime[j][k] << endl;
         }
     }
+    clock_t endTime = clock();
 
+    cout << "résultat = " << res << endl;
+    cout <<"Cmax= " << best_gene.fitness << endl;
+    cout<< "Durée du programme " << ":" << double(endTime - startTime)/ CLOCKS_PER_SEC << "s" <<endl;
     system("pause");
     return 0;
 }
