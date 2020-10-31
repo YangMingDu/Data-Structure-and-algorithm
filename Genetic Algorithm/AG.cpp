@@ -166,9 +166,9 @@ void calculateFitness(Gene &gene, Store &store) {
     gene.fitness = fulfillTime;
 }
 
-string AtoS(int arr[],int n){
+string AtoS(vector<int> arr){
     string res;
-    for(int i = 0 ; i < n; i++){
+    for(int i = 0 ; i < arr.size(); i++){
         char a = arr[i] + '0';
         res += a;
     }
@@ -176,7 +176,7 @@ string AtoS(int arr[],int n){
 
 }
 
-void readFileResultat(string f, int arr[]){
+void readFileResultat(string f, vector<int> &arr){
     ifstream infile;
     infile.open(f);
     if (!infile.is_open())
@@ -187,21 +187,19 @@ void readFileResultat(string f, int arr[]){
 
     string line , number;
     istringstream is(line);
-    int i , j = 0 ;
     int p;
     while(std::getline(infile, line))
     {
         istringstream is(line);
         while(std::getline(is, number, ','))
         {
-            arr[j] = stoi(number) ;
-            j++;
+            arr.push_back(stoi(number)) ;
         }
 
-        j=0;
-        i++;
+        
     }
- 
+    
+    
 
     infile.close();
 
@@ -214,7 +212,7 @@ void readFileResultat(string f, int arr[]){
  */
 void initializePopulation(vector<Gene> &genes, int population) {
     set<Gene> gs;
-    for (int i = 0; i < population; i++) {
+    for (int i = 0; i < population - 1; i++) {
         vector<int> index_list;
         generateVector(index_list, job * machine);
         Gene gene;
@@ -227,23 +225,23 @@ void initializePopulation(vector<Gene> &genes, int population) {
                     gene.chromosome[value] = Char(j);
             }
         }
+        
         remove_if(gene.chromosome.begin(), gene.chromosome.end(), [](char v) -> bool { return v == '0'; });
         gene.chromosome.resize(static_cast<ulong>(chromosome_size));
         Store store;
         calculateFitness(gene, store);
         gs.insert(gene);
-    }
-
-    int arr[] = {};
-    readFileResultat("result.csv", arr);
-    int n = sizeof(arr)/sizeof(int);
+    }   
     Gene gene2;
-    gene2.chromosome = AtoS(arr,n);
+    vector<int> arr;
+    readFileResultat("Heuristique.csv", arr);
+    gene2.chromosome = AtoS(arr);
+
     remove_if(gene2.chromosome.begin(), gene2.chromosome.end(), [](char v) -> bool { return v == '0'; });
     gene2.chromosome.resize(static_cast<ulong>(chromosome_size));
     Store store;
     calculateFitness(gene2,store);
-    gs.insert(gene2);
+    gs.insert(gene2);  
 
     insert_iterator<vector<Gene>> insert_vector(genes, genes.begin());
     copy(gs.begin(), gs.end(), insert_vector);
@@ -310,7 +308,7 @@ pair<Gene, Gene> orderCrossover(Gene &first, Gene &second) {
  * @param n 
  * @return 
  */
-Gene selectIndividual(int n = 10) {
+Gene selectIndividual(int n = 3) {
     vector<int> index_list;
     generateVector(index_list, population_number);
     vector<Gene> simple;
@@ -330,6 +328,8 @@ Gene selectIndividual(int n = 10) {
 
 
 void readFile(string f,int m[N][N],bool b){
+    int i = 0;
+    int j = 0;
     ifstream infile;
     infile.open(f);
     if (!infile.is_open())
@@ -340,7 +340,6 @@ void readFile(string f,int m[N][N],bool b){
 
     string line , number;
     istringstream is(line);
-    int i , j = 0 ;
     int p;
     while(std::getline(infile, line))
     {
@@ -371,8 +370,22 @@ int main() {
     srand(static_cast<uint>(time(nullptr)));
  
     chromosome_size = 0;
-    readFile("insm1.csv",matrix.Machine,1);
-    readFile("inst1.csv",matrix.Time,0);
+    readFile("Machines.csv",matrix.Machine,true);
+    readFile("Times.csv",matrix.Time,false);
+/*     for(int i = 0; i < 15; i++){
+        for(int j = 0; j < 15; j++){
+            cout<<matrix.Machine[i][j]<<",";
+        }
+        cout<<endl;
+        
+    }
+     for(int i = 0; i < 15; i++){
+        for(int j = 0; j < 15; j++){
+            cout<<matrix.Time[i][j]<<",";
+        }
+        cout<<endl;
+        
+    }  */
  
     for (int i = 0; i < job; i++) {
         for (int j = 0; j < process; j++) {
@@ -421,7 +434,27 @@ int main() {
     }
  
     Store store;
-    cout << "result = " << best_gene.chromosome << " time = " << best_gene.fitness << endl;
+    string s = best_gene.chromosome;
+    string res;
+    for(int i = 0; i< s.size(); i++){
+
+        string temp;
+        stringstream ss;
+        int a = s[i] -'0';
+        ss << a;
+        temp = ss.str();
+
+        if(i != s.size() - 1){
+            temp = temp + "->";
+        }
+        
+        res += temp;
+
+        
+    }
+
+    cout << "result = " << res << endl;
+    cout <<"time = " << best_gene.fitness << endl;
     calculateFitness(best_gene, store);
     for (int i = 0; i < machine; i++) {
         cout << "machine" << i << " work time " << store.machineWorkTime[i] << endl;
@@ -434,5 +467,7 @@ int main() {
                      << store.startTime[j][k] << " end time=" << store.endTime[j][k] << endl;
         }
     }
+
+    system("pause");
     return 0;
 }
