@@ -4,7 +4,7 @@
 
 using namespace :: std;
 
-int steps;
+int steps = 0;
 //记忆数组，利用记忆数组记录fib（n）的值，使得每个n只计算一次即可。
 vector<long long> memo;
 //在递归的基础上添加记忆。
