@@ -20,7 +20,10 @@ public:
 
         int res = -1;
 
+
+        //至少分一次
         for(int i = 1 ; i <= n - 1 ; i ++){
+            //因为breakint至少分割一次，所以要考虑当不再分割时是最大值的情况，i*（n-i）
             res = max3(res,i*(n-i),i*breakInt(n-i));
             memo[n] = res;
         }
