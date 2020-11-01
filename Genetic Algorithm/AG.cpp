@@ -16,7 +16,7 @@
 
 using namespace std;
 const ulong population_number = 20;
-const ulong times = 300;
+const ulong times = 50;
 const ulong N = 20;
  
 int machine;          //机器数量
@@ -453,11 +453,12 @@ int main() {
                      << store.startTime[j][k] << " end time=" << store.endTime[j][k] << endl;
         }
     }
+
     clock_t endTime = clock();
 
-    cout << "résultat = " << res << endl;
+    cout <<"résultat = " << res << endl;
     cout <<"Cmax= " << best_gene.fitness << endl;
-    cout<< "Durée du programme " << ":" << double(endTime - startTime)/ CLOCKS_PER_SEC << "s" <<endl;
+    cout <<"Durée du programme " << ":" << double(endTime - startTime)/ CLOCKS_PER_SEC << "s" <<endl;
     system("pause");
     return 0;
 }
