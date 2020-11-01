@@ -7,7 +7,7 @@ class Solution {
 
 public:
 
-    
+    //动态规划，自底向上
     int numSquares(int n) {
 
 
