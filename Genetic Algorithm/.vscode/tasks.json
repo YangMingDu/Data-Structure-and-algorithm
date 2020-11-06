@@ -1,0 +1,28 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "C/C++: g++.exe build active file",
+            "command": "C:\\SDK\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-g",
+                "-fexec-charset=GBK",
+                "-finput-charset=UTF-8",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

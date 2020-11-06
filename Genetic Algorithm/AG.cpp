@@ -15,23 +15,27 @@
 #define uint unsigned int
 
 using namespace std;
-const ulong population_number = 20;
-const ulong times = 50;
-const ulong N = 20;
+const ulong population_number = 20;//nombre total de groupe
+const ulong times = 50;//Algèbre génétique
+const ulong N = 200;
  
-int machine;          //机器数量
-int job;              //工件数量
-int process;          //任务总数
-int chromosome_size;  //染色体长度
+int machine;          //Nombre de machines
+int job;              //Nombre d'emplois
+int process;          //Nombre total de processus
+int chromosome_size;  //Longueur du chromosome
+
+const string ins_machine = "Machines.csv";             //entrer la fiche Machine
+const string ins_time = "Times.csv";                //entrer la fiche Time
+const string res_heuristique = "Heuristique.csv";  //entrer la fiche du résultat heuristique
+
  
- 
-const class Probability {        //概率
+const class Probability {        
 public:
-    const double cross = 0.95;   //交叉概率
-    const double mutation = 0.05;//变异概率
+    const double cross = 0.95;   //Probabilité de croisement
+    const double mutation = 0.05;//Probabilité de mutation
 } probability;
  
-class Matrix {              //矩阵
+class Matrix {              //matrice
 public:
     int Machine[N][N] = {}; //job process => machine
     int Time[N][N] = {};    //job process => time
@@ -42,10 +46,10 @@ public:
     }
 } matrix;
  
-class Gene {     //基因
+class Gene {     
 public:
-    string chromosome = string(static_cast<ulong>(job * machine), '0'); //染色体
-    int fitness = 0;                                                    //适应度
+    string chromosome = string(static_cast<ulong>(job * machine), '0'); 
+    int fitness = 0;                                                    
  
     explicit Gene(int fitness) { this->fitness = fitness; };
  
@@ -67,12 +71,12 @@ public:
     }
 };
  
-vector<Gene> populations;       //种群
+vector<Gene> populations;       
  
 class Store {
 public:
-    int machineWorkTime[N] = {}; //机器工作时间
-    int processIds[N] = {};      //对应任务的工序
+    int machineWorkTime[N] = {}; //Temps de travail de la machine
+    int processIds[N] = {};      //Processus correspondant à la tâche
     int endTime[N][N] = {};      //job process => endtime
     int startTime[N][N] = {};    //job process => starttime
     Store() = default;
@@ -94,7 +98,7 @@ public:
 };
  
 /**
- * 产生 start到end的随机整数
+ * Générer des nombres aléatoires
  * @param start
  * @param end
  * @return
@@ -104,7 +108,7 @@ ulong randint(ulong start, ulong end) {
 }
  
 /**
- * 产生 0 到 end的随机整数
+ * Générer des nombres aléatoires
  * @param end
  * @return
  */
@@ -131,7 +135,7 @@ char Char(int i) {
 }
  
 /**
- * 将vector填充整数
+ * 
  * @param v
  * @param length
  * @param except
@@ -144,7 +148,7 @@ void generateVector(vector<int> &v, int length, int except = -1) {
 }
  
 /**
- * 计算适应度
+ * Calculer fitness
  * @param gene
  * @param store
  */
@@ -181,8 +185,8 @@ void readFileResultat(string f, vector<int> &arr){
     infile.open(f);
     if (!infile.is_open())
     {
-        cout << "open failed" << endl;
-        exit(0);
+        cout << "Can't find result of heuristique" << endl;
+
     }
 
     string line , number;
@@ -206,7 +210,7 @@ void readFileResultat(string f, vector<int> &arr){
 }
  
 /**
- * 初始化种群
+ * Population initiale
  * @param genes 
  * @param population 
  */
@@ -234,10 +238,11 @@ void initializePopulation(vector<Gene> &genes, int population) {
     }   
     Gene gene2;
     vector<int> arr;
-    readFileResultat("Heuristique.csv", arr);
+    readFileResultat(res_heuristique, arr);
+    if(arr.size()){ 
     gene2.chromosome = AtoS(arr);
 
-    remove_if(gene2.chromosome.begin(), gene2.chromosome.end(), [](char v) -> bool { return v == '0'; }); 
+    remove_if(gene2.chromosome.begin(), gene2.chromosome.end(), [](char v) -> bool { return v == '0'; });
     gene2.chromosome.resize(static_cast<ulong>(chromosome_size));
     Store store;
     calculateFitness(gene2,store);
@@ -245,14 +250,15 @@ void initializePopulation(vector<Gene> &genes, int population) {
 
     insert_iterator<vector<Gene>> insert_vector(genes, genes.begin());
     copy(gs.begin(), gs.end(), insert_vector);
+    }
 }
  
 /**
- * 基因突变
+ * Mutation génétique
  * @param gene 
  * @param n 
  */
-void geneticMutation(Gene &gene, int n = 3) {
+void geneticMutation(Gene &gene, int n = 2) {
     vector<int> index_list;
     generateVector(index_list, chromosome_size);
     for (int i = 0; i < n; i++) {
@@ -266,7 +272,7 @@ void geneticMutation(Gene &gene, int n = 3) {
 }
  
 /**
- * 基因交叉
+ * Croisement de gènes
  * @param first 
  * @param second 
  * @return 
@@ -304,7 +310,7 @@ pair<Gene, Gene> orderCrossover(Gene &first, Gene &second) {
 }
  
 /**
- * 选择个体
+ * Sélectionnez des individus
  * @param n 
  * @return 
  */
@@ -367,12 +373,12 @@ void readFile(string f,int m[N][N],bool b){
 }
  
 int main() {
-    srand(static_cast<uint>(time(nullptr)));
     clock_t startTime = clock();
+    srand(static_cast<uint>(time(nullptr)));
  
     chromosome_size = 0;
-    readFile("Machines.csv",matrix.Machine,true);
-    readFile("Times.csv",matrix.Time,false);
+    readFile(ins_machine,matrix.Machine,true); //entrer la fiche Machine
+    readFile(ins_time,matrix.Time,false);  
 
  
     for (int i = 0; i < job; i++) {
@@ -382,7 +388,7 @@ int main() {
         }
     }
  
-    initializePopulation(populations, population_number);    //初始化种群
+    initializePopulation(populations, population_number);    
     ulong n = times;
     while (n-- > 0) {
         cout << "n = " << n << endl;
@@ -415,7 +421,7 @@ int main() {
  
     Gene best_gene(0xffffff);
     for (const auto &it : populations) {
-        //cout << "chromosome = " << it.chromosome << " " << it.fitness << endl;
+        //cout << "chromosome = " << it.chromosome << " " << it.fitness << endl;Sortie de chaque chromosome
         if (best_gene.fitness > it.fitness) {
             best_gene = it;
         }
@@ -441,6 +447,7 @@ int main() {
         
     }
 
+  
     calculateFitness(best_gene, store);
     for (int i = 0; i < machine; i++) {
         cout << "machine" << i << " work time " << store.machineWorkTime[i] << endl;
@@ -453,12 +460,12 @@ int main() {
                      << store.startTime[j][k] << " end time=" << store.endTime[j][k] << endl;
         }
     }
-
     clock_t endTime = clock();
 
-    cout <<"résultat = " << res << endl;
+    cout << "resultat = " << res << endl;
     cout <<"Cmax= " << best_gene.fitness << endl;
-    cout <<"Durée du programme " << ":" << double(endTime - startTime)/ CLOCKS_PER_SEC << "s" <<endl;
+    cout<< "Duree du programme " << ":" << double(endTime - startTime)/ CLOCKS_PER_SEC << "s" <<endl;
+    
     system("pause");
     return 0;
 }
