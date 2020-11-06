@@ -27,12 +27,12 @@ public:
             return res;
         }
 
-        //递归根节点的左子树
+        //递归节点的左子树
         vector<string> leftS = binaryTreePaths(root->left);
         for (int i = 0 ; i < leftS.size() ; i ++){
             res.push_back(to_string(root->val) + "->" +leftS[i]);
         }
-        //递归根节点的右子树
+        //递归节点的右子树
         vector<string> rightS = binaryTreePaths(root->right);
         for (int i = 0 ; i < rightS.size() ; i ++){
             res.push_back(to_string(root->val) + "->" +rightS[i]);
