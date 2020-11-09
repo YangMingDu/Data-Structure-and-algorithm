@@ -5,6 +5,7 @@
 using namespace ::std;
 class Solution {
 public:
+    //利用哈希表记录
     int findRepeatNumber(vector<int>& nums) {
         if (nums.size() == 0){
             return -1;
