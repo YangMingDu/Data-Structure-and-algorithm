@@ -44,8 +44,12 @@ private:
 
         for(int i = 0 ; i < nums.size() ; i ++)
             if(!used[i]){
-                if(i > 0 && nums[i] == nums[i-1] && !used[i-1])
+                if(i > 0 && nums[i] == nums[i-1] && !used[i-1]){
+
+                
+                    cout << "skip" <<endl;
                     continue;
+                }
                 p.push_back(nums[i]);
                 used[i] = true;
 
@@ -67,7 +71,7 @@ void printVec(const vector<int>& vec){
 
 int main() {
 
-    vector<int> nums1 = {1, 1,2};
+    vector<int> nums1 = {1, 1,1,1,2};
     vector<vector<int>> res1 = Solution().permuteUnique(nums1);
     for(const vector<int>& tres: res1)
         printVec(tres);
