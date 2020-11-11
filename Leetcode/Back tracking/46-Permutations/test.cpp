@@ -15,6 +15,12 @@ public:
 
     void backTravel(int index,vector<int>& nums,vector<int> &p){
 
+        cout<< index <<" : ";
+        for(int j = 0 ; j < p.size(); j++){
+            cout<<p[j];
+        }
+        cout<<endl;
+
         if(index == nums.size()){
             res.push_back(p);
             return;

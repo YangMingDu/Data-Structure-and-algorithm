@@ -11,10 +11,13 @@ public:
 
     void backTravel(int index,vector<int>& nums,vector<int> &p){
 
+
+
         if(index == nums.size()){
             res.push_back(p);
             return;
         }
+
 
         for(int i = 0 ; i < nums.size() ; i++){
             if(!used[i]){
