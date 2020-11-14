@@ -13,6 +13,7 @@ public:
     }
 
     void dfs(vector<vector<char>>& grid , int x, int y){
+        //和79题差不多，就是不用回溯布尔值。
         isVisited[x][y] = true;
         for( int i  = 0 ; i < 4 ; i ++){
                 int newx = x + d[i][0];
