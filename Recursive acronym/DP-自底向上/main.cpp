@@ -21,7 +21,7 @@ long long fib(int n){
 
 int main(){
 
-    int n = 50;
+    int n = 10;
     clock_t startTime = clock();
  
     long long res = fib(n);

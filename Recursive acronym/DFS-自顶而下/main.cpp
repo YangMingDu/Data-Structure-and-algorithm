@@ -28,7 +28,7 @@ long long fib(int n){
 
 int main(){
 
-    int n = 50;
+    int n = 45;
     memo = vector<long long>(n+1,-1);
     clock_t startTime = clock();
  
