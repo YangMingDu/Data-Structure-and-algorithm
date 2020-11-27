@@ -1,5 +1,4 @@
 #include <vector>
-
 using namespace ::std;
 class Solution {
 public:
@@ -22,18 +21,9 @@ public:
                 //回溯步骤，维护used，并且踢掉之前的元素
                 used[i] = false;
                 p.pop_back();
-
             }
         }
-
     }
-
-
-
-
-
-
-
     vector<vector<int>> permute(vector<int>& nums) {
 
         vector<int> p;
