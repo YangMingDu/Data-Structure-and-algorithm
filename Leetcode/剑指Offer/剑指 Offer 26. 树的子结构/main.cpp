@@ -23,6 +23,7 @@ public:
     }
     bool isSubStructure(TreeNode* A, TreeNode* B) {
         if(!A||!B) return false;
+        //从根，左子树，右子树分别寻找
         return dfs(A,B)||isSubStructure(A->left,B)||isSubStructure(A->right,B);
     }
 };
