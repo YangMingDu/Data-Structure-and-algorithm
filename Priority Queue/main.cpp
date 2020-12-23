@@ -59,13 +59,14 @@ int main(){
         cout << "insert "<<num<<" in priority queue"<<endl;
 
     }
+    cout<<"size:"<<pq3.size();
     while(!pq3.empty()){
         cout<< pq3.top() <<" ";
         pq3.pop();
     }
-
+    
     cout<< endl;
-
+    
     return 0;
 
 }
